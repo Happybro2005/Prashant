@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Tax Calculator</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: #f0f0f0;
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 2rem;
+    }
+    #app {
+      background: rgba(255,255,255,0.1);
+      border-radius: 12px;
+      padding: 2rem 3rem;
+      width: 360px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+      text-align: center;
+    }
+    h1 {
+      margin-bottom: 1rem;
+      font-weight: 700;
+      font-size: 1.8rem;
+      letter-spacing: 1px;
+      color: #fff;
+    }
+    button {
+      background: #ff6f61;
+      border: none;
+      color: white;
+      font-size: 1rem;
+      margin: 0.5rem;
+      padding: 0.7rem 1.8rem;
+      border-radius: 30px;
+      cursor: pointer;
+      box-shadow: 0 4px 8px rgba(255, 111, 97, 0.6);
+      transition: background 0.3s ease;
+    }
+    button:hover {
+      background: #ff3b2f;
+    }
+    input[type="number"] {
+      width: 100%;
+      font-size: 1rem;
+      padding: 0.7rem 0.9rem;
+      border-radius: 6px;
+      border: none;
+      margin-top: 1rem;
+      outline: none;
+      box-sizing: border-box;
+      box-shadow: inset 0 1px 3px rgba(0,0,0,0.2);
+    }
+    .message {
+      margin-top: 1.5rem;
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: #ffe066;
+    }
+    .tax-result {
+      margin-top: 1.5rem;
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: #b3ffae;
+    }
+    small {
+      color: #ccc;
+      display: block;
+      margin-top: 0.5rem;
+      font-weight: 500;
+      font-style: italic;
+    }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <h1>Are you a Salaried Employee or a Business Person?</h1>
+    <button id="btnSalaried">Salaried Employee</button>
+    <button id="btnBusiness">Business Person</button>
+
+    <div id="salaryInputSection" style="display:none;">
+      <label for="salaryInput">Enter your Annual Salary (₹):</label>
+      <input type="number" id="salaryInput" min="0" step="1000" placeholder="e.g. 500000" />
+      <button id="calculateBtn">Calculate Tax</button>
+      <small>(In Indian Rupees, numbers only)</small>
+    </div>
+
+    <div class="message" id="message"></div>
+    <div class="tax-result" id="taxResult"></div>
+  </div>
+
+  <script>
+    const btnSalaried = document.getElementById('btnSalaried');
+    const btnBusiness = document.getElementById('btnBusiness');
+    const salaryInputSection = document.getElementById('salaryInputSection');
+    const salaryInput = document.getElementById('salaryInput');
+    const calculateBtn = document.getElementById('calculateBtn');
+    const message = document.getElementById('message');
+    const taxResult = document.getElementById('taxResult');
+
+    btnBusiness.addEventListener('click', () => {
+      salaryInputSection.style.display = 'none';
+      taxResult.textContent = '';
+      message.textContent = 'Site is under maintenance.';
+    });
+
+    btnSalaried.addEventListener('click', () => {
+      message.textContent = '';
+      taxResult.textContent = '';
+      salaryInputSection.style.display = 'block';
+      salaryInput.value = '';
+      salaryInput.focus();
+    });
+
+    calculateBtn.addEventListener('click', () => {
+      taxResult.textContent = '';
+      message.textContent = '';
+      let salary = Number(salaryInput.value);
+
+      if (isNaN(salary) || salary < 0) {
+        message.textContent = 'Please enter a valid non-negative salary amount.';
+        return;
+      }
+
+      let tax = 0;
+      if (salary > 0 && salary <= 400000) {
+        tax = 0;
+      } else if (salary > 400000 && salary <= 800000) {
+        tax = 0.05 * salary;
+      } else if (salary > 800000 && salary <= 1200000) {
+        tax = 0.10 * salary;
+      } else if (salary > 1200000 && salary <= 1600000) {
+        tax = 0.15 * salary;
+      } else if (salary > 1600000 && salary <= 2000000) {
+        tax = 0.20 * salary;
+      } else if (salary > 2000000 && salary <= 2400000) {
+        tax = 0.25 * salary;
+      } else if (salary > 2400000) {
+        tax = 0.30 * salary;
+      }
+
+      taxResult.textContent = 'Total Tax: ₹ ' + tax.toLocaleString('en-IN', {maximumFractionDigits: 2});
+    });
+  </script>
+</body>
+</html>
+
